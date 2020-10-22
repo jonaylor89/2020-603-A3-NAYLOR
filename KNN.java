@@ -17,30 +17,22 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import weka.core.Instances;
+import weka.core.Instance;
 import weka.core.ArffReader;
 
 class KNN {
 
-    public static class MapperKNN extends Mapper<> {
+    private static int k;
+    private static Instances testSet;
+
+    public static class MapperKNN extends Mapper<Object, Text, IntWritable, IntWritable> {
 
         private static void computeKNN() {
 
         }
 
         @Override
-        public void setup(Context context) throws IOException {
-            
-            if (context.getCacheFiles() != null && context.getCacheFiles().length > 0) {
-                String params = FilesUtils.readFileToString(new File("./paramFile"));
-                StringTokenizer tokenizer = new StringTokenizer(params, ",");
-
-                k = Integer.parseInt(tokenizer.nextToken());
-            }
-        }
-        
-
-        @Override
-        public static void map(Context context) throws IOException {
+        public static void map(Object key, Text value, Context context) throws IOException {
         /*
          *
          * for i in range(testSet)
@@ -52,8 +44,11 @@ class KNN {
          * context.write(key, CDj)
          */
 
-            /*
-            for (int i = 0; i < testSet.numInstancesj(); i++) {
+            double[][] CD_j = new double[testSet.numInstances()][k];
+
+            StringTokenizer tokenizer = new StringTokenizer(value, ",");
+
+            for (int i = 0; i < testSet.numInstances(); i++) {
                 computeKNN(testSet[i], trainSetSplit_j, k);
 
                 for (int n = 0; n < k; n++) {
@@ -61,9 +56,7 @@ class KNN {
                 }
             }
 
-            key = idMapper;
-            context.write(key, CD_j);
-            */
+            context.write(1, CD_j);
         }
     }
 
@@ -71,8 +64,24 @@ class KNN {
 
         private static double CD_reducer[][];
 
-        private static int majorityVoting() {
-            return 0;
+        private static int majorityVoting(double[] row) {
+
+            HashMap<Integer, Integer> histogram = new HashMap<Integer, Integer>;
+            int mode_count = 0;
+            int mode = -1;
+            
+            for (int i = 0; i < k; i++) {
+
+                int element = row[i];
+                histogram[element]++;
+
+                if (histogram[element] > mode_count) {
+                    mode_count = histogram[element];
+                    mode = element;
+                }
+            }
+
+            return mode;
         }
 
         @Override
@@ -84,7 +93,7 @@ class KNN {
          * Classes can be random but the distances should be set to infinity
          */
 
-           CD_reducer = new double[testSet.size()][k]; 
+            CD_reducer = new double[testSet.numInstances()][k]; 
 
         }
 
@@ -127,7 +136,7 @@ class KNN {
 
             /*
             for (int i = 0; i < testSet.numInstances(); i++) {
-                prediction = majorityVoting();
+                prediction = majorityVoting(CD_reducer[i]);
                 context.write(i, prediction);
             }
             */
@@ -138,11 +147,13 @@ class KNN {
 
     public static void main(String[] argv) {
 
-        BufferedReader reader = new BufferedReader(new FileReader("./small.arff"));
+        k = 5;
+
+        BufferedReader reader = new BufferedReader(new FileReader("./Test/small.arff"));
         ArffReader arff = new ArffReader(reader);
 
-        Instances data = arff.getData();
-        data.setClassIndex(data.numAttributes() - 1);
+        Instances testSet = arff.getData();
+        testSet.setClassIndex(data.numAttributes() - 1);
 
         Configuration conf = new Configuration();
 
