@@ -1,3 +1,4 @@
+package xyz.jonaylor;
 
 import java.io.IOException;
 import java.io.BufferedReader;
@@ -8,6 +9,8 @@ import java.util.StringTokenizer;
 import org.apache.hadoop.commons.io.FilesUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.NullWritable;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapreduce.Job;
@@ -20,15 +23,73 @@ import weka.core.Instances;
 import weka.core.Instance;
 import weka.core.ArffReader;
 
-class KNN {
+public class KNN {
 
     private static int k;
     private static Instances testSet;
 
-    public static class MapperKNN extends Mapper<Object, Text, IntWritable, IntWritable> {
+    public class PairWritable implements Writable {
+        private IntWritable value1;
+        private DoubleWritable value2;
 
-        private static void computeKNN() {
+        public PairWritable() {
+            value1 = new IntWritable();
+            value2 = new DoubleWritable();
+        }
 
+        public PairWritable(int value1, double value2) {
+            this.value1 = new IntWritable(value1);
+            this.value2 = new DoubleWritable(value2);
+        }
+
+        public int get0() {
+            return value1.get();
+        }
+
+        public int get1() {
+            return value2.get();
+        }
+
+        @Override
+        public String toString() {
+            return value1.toString() + " " + value2.toString();
+        }
+
+        @Override
+        public void readFields(DataInput in) throws IOException {
+            value1.readFields(in);
+            value2.readFields(in);
+        }
+
+        @Override
+        public void write(DataOutput out) throws IOException {
+            value1.write(out);
+            value2.write(out);
+        }
+    }
+
+    public static class MapperKNN extends Mapper<Object, Text, IntWritable, PairWritable> {
+
+        public static class Point {
+            private double data[];
+            private int classValue;
+            
+            Point(double[] data, int classValue) {
+                this.data = data;
+                this.classValue = classValue;
+            }
+
+            double[] getData() {
+                return data;
+            }
+
+            int getClassValue() {
+                return classValue;
+            }
+        }
+
+        private static void computeKNN(Instance test, Point[] train) {
+            
         }
 
         @Override
@@ -44,35 +105,37 @@ class KNN {
          * context.write(key, CDj)
          */
 
-            double[][] CD_j = new double[testSet.numInstances()][k];
+         /*
+            PairWritable[][] CD_j = new double[testSet.numInstances()][k];
 
             StringTokenizer tokenizer = new StringTokenizer(value, ",");
 
             for (int i = 0; i < testSet.numInstances(); i++) {
-                computeKNN(testSet[i], trainSetSplit_j, k);
+                computeKNN(testSet[i], trainSetSplit_j);
 
                 for (int n = 0; n < k; n++) {
-                    CD_j[i][n] = new Tuple<Integer, Double>();
+                    CD_j[i][n] = new PairWritable(testSet[i].getClassValue(), distance);
                 }
             }
 
             context.write(1, CD_j);
+         */
         }
     }
 
-    public static class ReducerKNN extends Reducer<> {
+    public static class ReducerKNN extends Reducer<IntWritable, PairWritable, IntWritable, IntWritable> {
 
-        private static double CD_reducer[][];
+        private static PairWritable CD_reducer[][];
 
-        private static int majorityVoting(double[] row) {
+        private static int majorityVoting(PairWritable[] row) {
 
-            HashMap<Integer, Integer> histogram = new HashMap<Integer, Integer>;
+            HashMap<Integer, Integer> histogram = new HashMap<Integer, Integer>();
             int mode_count = 0;
             int mode = -1;
             
             for (int i = 0; i < k; i++) {
 
-                int element = row[i];
+                int element = row[i].get0();
                 histogram[element]++;
 
                 if (histogram[element] > mode_count) {
@@ -93,12 +156,12 @@ class KNN {
          * Classes can be random but the distances should be set to infinity
          */
 
-            CD_reducer = new double[testSet.numInstances()][k]; 
+            CD_reducer = new PairWritable[testSet.numInstances()][k]; 
 
         }
 
         @Override
-        public static void reduce(Context context) throws IOException {
+        public static void reduce(IntWritable key, PairWritable[][] value, Context context) throws IOException {
         /*
          *
          * for i in range(testSet.size())
@@ -110,17 +173,15 @@ class KNN {
          * 
          */
 
-            /*
             for (int i = 0; i < testSet.numInstances(); i++) {
                 int cont = 0;
                 for (int n = 0; n < k; n++) {
-                    if (CD_j[i][cont].dist < CD_reducer[i][n].dist) {
-                        CD_reducer[i][n] = CD_j[i][cont];
+                    if (value[i][cont].get1() < CD_reducer[i][n].get1()) {
+                        CD_reducer[i][n] = value[i][cont];
                         cont++;
                     }
                 }
             }
-            */
         }
 
         @Override
@@ -134,13 +195,10 @@ class KNN {
          *
          */
 
-            /*
             for (int i = 0; i < testSet.numInstances(); i++) {
                 prediction = majorityVoting(CD_reducer[i]);
                 context.write(i, prediction);
             }
-            */
-
         }
 
     }
@@ -165,11 +223,13 @@ class KNN {
 
         job.setNumReduceTasks(1);
 
-        job.setMapOutputKeyClass(NullWriteable.class);
-        job.setMapOutputValueClass(DoubleString.class);
+        // job.getConfiguration().setInt(LINES_PER_MAP, 300);
 
-        job.setOutputKeyClass(NullWritable.class);
-        job.setOutputValueClass(Text.class);
+        job.setMapOutputKeyClass(IntWritable.class);
+        job.setMapOutputValueClass(PairWritable.class);
+
+        job.setOutputKeyClass(IntWritable.class);
+        job.setOutputValueClass(IntWritable.class);
 
         FileInputFormat.addInputPath(job, new Path(args[0]));
         FileOutputFormat.addOutputPath(job, new Path(args[1]));
