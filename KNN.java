@@ -88,6 +88,25 @@ public class KNN {
             }
         }
 
+        private static Point[] parseInput(Text value) {
+
+            String[] dataPoints = value.toString().split("\n");
+            Point[] trainSet = new Point[dataPoints.length];
+
+            for (int i = 0; i < dataPoints.length; i++) {
+                String rawPoint = dataPoints[i].split(",");
+                double[] dataPoint = Arrays.asList(point).stream().mapToInt(Double::parseDouble).toArray();  
+
+                double[] dimensions = Arrays.copyOfRange(0, dataPoint.length - 2);
+                int classValue = (int)dataPoint[dataPoint.length - 1];
+                Point p = new Point(dimensions, classValue);
+
+                trainSet[i] = p;
+            }
+
+            return trainSet;
+        }
+
         private static void computeKNN(Instance test, Point[] train) {
             
         }
@@ -101,14 +120,12 @@ public class KNN {
          *      for n in range(0, k)
          *          CDj[i][n] = (class of neighbor n, distance of neighbor n)
          * 
-         * key = idMapper
-         * context.write(key, CDj)
+         * key = idMapper * context.write(key, CDj)
          */
 
-         /*
-            PairWritable[][] CD_j = new double[testSet.numInstances()][k];
+            Point[] trainSetSplit_j = parseInput(value);
 
-            StringTokenizer tokenizer = new StringTokenizer(value, ",");
+            PairWritable[][] CD_j = new double[testSet.numInstances()][k];
 
             for (int i = 0; i < testSet.numInstances(); i++) {
                 computeKNN(testSet[i], trainSetSplit_j);
@@ -119,7 +136,6 @@ public class KNN {
             }
 
             context.write(1, CD_j);
-         */
         }
     }
 
