@@ -99,7 +99,7 @@ public class KNN {
 
 
         @Override
-        private void setup(Context context) throws IOException, InterruptedException {
+        public void setup(Context context) throws IOException, InterruptedException {
 
             Configuration conf = context.getConfiguration();
 
