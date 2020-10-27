@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.File;
 import java.io.DataInput;
 import java.io.DataOutput;
+import java.nio.Files;
 import java.util.StringTokenizer;
 import java.util.List;
 import java.util.HashMap;
@@ -94,6 +95,9 @@ public class KNN {
 
         @Override
         private void setup() {
+            BufferedReader reader = new BufferedReader(new FileReader(filename));
+            Instances testSet = arff.getData();
+            testSet.setClassIndex(data.numAttributes() - 1);
 
         }
 
@@ -256,16 +260,10 @@ public class KNN {
 
     }
 
-/*
-    private static Instances getTestInstances(String filename) {
+    private static String getTestInstances(String filename) {
 
-        BufferedReader reader = new BufferedReader(new FileReader(filename));
-        Instances testSet = arff.getData();
-        testSet.setClassIndex(data.numAttributes() - 1);
-
-        return testSet;
+        return Files.readString(filename);
     }
-    */
 
     public static void main(String[] argv) throws Exception {
 
@@ -290,7 +288,7 @@ public class KNN {
         FileInputFormat.addInputPath(job, new Path(argv[0]));
         FileOutputFormat.setOutputPath(job, new Path(argv[1]));
 
-        Instances testInstances = getTestInstances(args[2]);
+        String testInstances = getTestInstances(args[2]);
 	    conf.set("testInstances", testInstances);
 
         conf.set("k", args[3]);
