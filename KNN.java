@@ -277,14 +277,14 @@ public class KNN {
         job.setOutputKeyClass(IntWritable.class);
         job.setOutputValueClass(IntWritable.class);
 
-        FileInputFormat.addInputPath(job, new Path(args[0]));
-        FileOutputFormat.addOutputPath(job, new Path(args[1]));
+        FileInputFormat.addInputPath(job, new Path(argv[0]));
+        FileOutputFormat.addOutputPath(job, new Path(argv[1]));
 
         // Instances testInstances = getTestInstances(args[2]);
 	    // conf.set("testInstances", testInstances);
 
         // conf.set("k", args[3]);
-        conf.set("k", args[2]);
+        conf.set("k", argv[2]);
 
         System.exit(job.waitForCompletion(true) ? 0 : 1);
 
