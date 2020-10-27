@@ -288,10 +288,10 @@ public class KNN {
         FileInputFormat.addInputPath(job, new Path(argv[0]));
         FileOutputFormat.setOutputPath(job, new Path(argv[1]));
 
-        String testInstances = getTestInstances(args[2]);
+        String testInstances = getTestInstances(argv[2]);
 	    conf.set("testInstances", testInstances);
 
-        conf.set("k", args[3]);
+        conf.set("k", argv[3]);
         // conf.set("k", argv[2]);
 
         System.exit(job.waitForCompletion(true) ? 0 : 1);
