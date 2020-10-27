@@ -76,6 +76,9 @@ public class KNN {
 
     public static class MapperKNN extends Mapper<Object, Text, IntWritable, PairWritable> {
 
+        private Instances testSet;
+        private int k;
+
         public static class Point {
             private double data[];
             private int classValue;
@@ -94,14 +97,18 @@ public class KNN {
             }
         }
 
-        /*
 
         @Override
-        private void setup() {
-            BufferedReader reader = new BufferedReader(new FileReader(filename));
-            Instances testSet = arff.getData();
+        private void setup(Context context) throws IOException, InterruptedException {
+
+            Configuration conf = context.getConfiguration();
+
+            ArffReader arff = new ArffReader(conf.get("testInstances"));
+
+            testSet = arff.getData();
             testSet.setClassIndex(data.numAttributes() - 1);
 
+            k = Integer.parseInt(conf.get("k"));
         }
 
         private static Point[] parseInput(Text value) {
@@ -139,8 +146,6 @@ public class KNN {
             // return those 5
 
         }
-
-        */
 
         @Override
         public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
