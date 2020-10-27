@@ -127,6 +127,12 @@ public class KNN {
             Configuration conf = context.getConfiguration();
 
             String testSetString = conf.get("testInstances");
+
+            if (testSetString == nul || testSetString == "") {
+                System.out.println("oops");
+                return;
+            }
+            
             StringReader reader = new StringReader(testSetString);
             ArffReader arff = new ArffReader(reader);
 
@@ -334,10 +340,6 @@ public class KNN {
         }
 
         String contentString = contentBuilder.toString();
-        if (contentString == null) {
-            System.out.println("oops");
-            return "";
-        }
  
         return contentBuilder.toString();
     }
