@@ -248,6 +248,7 @@ public class KNN {
 
     }
 
+/*
     private static Instances getTestInstances(String filename) {
 
         BufferedReader reader = new BufferedReader(new FileReader(filename));
@@ -256,6 +257,7 @@ public class KNN {
 
         return testSet;
     }
+    */
 
     public static void main(String[] argv) {
 
