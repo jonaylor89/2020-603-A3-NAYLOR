@@ -106,7 +106,7 @@ public class KNN {
             ArffReader arff = new ArffReader(new StringReader(conf.get("testInstances")));
 
             testSet = arff.getData();
-            testSet.setClassIndex(data.numAttributes() - 1);
+            testSet.setClassIndex(testSet.numAttributes() - 1);
 
             k = Integer.parseInt(conf.get("k"));
         }
@@ -117,8 +117,8 @@ public class KNN {
             Point[] trainSet = new Point[dataPoints.length];
 
             for (int i = 0; i < dataPoints.length; i++) {
-                String rawPoint = dataPoints[i].split(",");
-                double[] dataPoint = Arrays.asList(point).stream().mapToInt(Double::parseDouble).toArray();  
+                String[] rawPoint = dataPoints[i].split(",");
+                double[] dataPoint = rawPoint.stream().mapToInt(Double::parseDouble).toArray();  
 
                 double[] dimensions = Arrays.copyOfRange(dataPoint, 0, dataPoint.length - 2);
                 int classValue = (int)dataPoint[dataPoint.length - 1];
