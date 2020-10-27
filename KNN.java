@@ -136,7 +136,6 @@ public class KNN {
                 return;
             }
             
-            System.out.println(testSetString);
             StringReader reader = new StringReader(testSetString);
             ArffReader arff = new ArffReader(reader);
 

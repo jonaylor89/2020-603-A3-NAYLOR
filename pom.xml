@@ -27,14 +27,6 @@
       </dependencies>
       <build>
             <sourceDirectory>.</sourceDirectory>
-            <resources>
-                  <resource>
-                        <directory>.</directory>
-                        <excludes>
-                              <exclude>**/*.java</exclude>
-                        </excludes>
-                  </resource>
-            </resources>
             <plugins>
                   <plugin>
                       <artifactId>maven-assembly-plugin</artifactId>
