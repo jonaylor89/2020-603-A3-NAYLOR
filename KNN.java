@@ -24,7 +24,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import weka.core.Instances;
 import weka.core.Instance;
-import weka.core.ArffReader;
+import weka.converters.ArffLoader.ArffReader;
 
 public class KNN {
 
