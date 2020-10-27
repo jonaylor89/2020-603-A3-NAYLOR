@@ -24,9 +24,9 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-// import weka.core.Instances;
-// import weka.core.Instance;
-// import weka.converters.ArffLoader.ArffReader;
+import weka.core.Instances;
+import weka.core.Instance;
+import weka.core.converters.ArffLoader.ArffReader;
 
 public class KNN {
 
@@ -90,7 +90,6 @@ public class KNN {
             }
         }
 
-        /*
         private static Point[] parseInput(Text value) {
 
             String[] dataPoints = value.toString().split("\n");
@@ -100,7 +99,7 @@ public class KNN {
                 String rawPoint = dataPoints[i].split(",");
                 double[] dataPoint = Arrays.asList(point).stream().mapToInt(Double::parseDouble).toArray();  
 
-                double[] dimensions = Arrays.copyOfRange(0, dataPoint.length - 2);
+                double[] dimensions = Arrays.copyOfRange(dataPoint, 0, dataPoint.length - 2);
                 int classValue = (int)dataPoint[dataPoint.length - 1];
                 Point p = new Point(dimensions, classValue);
 
@@ -109,9 +108,7 @@ public class KNN {
 
             return trainSet;
         }
-        */
 
-        /*
         private static int[] getNeighbors(Instance test, Point[] train) {
             
             int[] neighbors = new int[5];
@@ -128,7 +125,6 @@ public class KNN {
             // return those 5
 
         }
-        */
 
         @Override
         public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
@@ -142,10 +138,9 @@ public class KNN {
          * key = idMapper * context.write(key, CDj)
          */
 
-         List<String> allTrainInstances = Arrays.asList(value.toString().split("\n"));
-         System.out.println("allTrainInstances " + allTrainInstances.size());
+         // List<String> allTrainInstances = Arrays.asList(value.toString().split("\n"));
+         // System.out.println("allTrainInstances " + allTrainInstances.size());
 
-         /*
             Point[] trainSetSplit_j = parseInput(value);
 
             PairWritable[][] CD_j = new double[testSet.numInstances()][k];
@@ -158,7 +153,6 @@ public class KNN {
                 }
             }
             context.write(1, CD_j);
-            */
         }
     }
 
