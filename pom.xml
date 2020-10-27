@@ -8,12 +8,6 @@
             <maven.compiler.source>1.8</maven.compiler.source>
             <maven.compiler.target>1.8</maven.compiler.target>
       </properties>
-      <configuration>
-            <property>
-                  <name>mapreduce.jobtracker.staging.root.dir</name>
-                  <value>/home/naylorjo/hadoop-tmp</value>
-            </property>
-      </configuration>
       <dependencies>
             <dependency>
                   <groupId>org.apache.hadoop</groupId>
