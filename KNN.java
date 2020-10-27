@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.io.File;
 import java.io.DataInput;
 import java.io.DataOutput;
-import java.nio.Files;
+import java.nio.file.Files;
 import java.util.StringTokenizer;
 import java.util.List;
 import java.util.HashMap;
