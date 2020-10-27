@@ -126,6 +126,10 @@ public class KNN {
 
             Configuration conf = context.getConfiguration();
 
+            System.out.println(conf);
+
+            k = Integer.parseInt(conf.get("k"));
+
             String testSetString = conf.get("testInstances");
 
             if (testSetString == null) {
@@ -139,7 +143,6 @@ public class KNN {
             testSet = arff.getData();
             testSet.setClassIndex(testSet.numAttributes() - 1);
 
-            k = Integer.parseInt(conf.get("k"));
         }
 
         private static Point[] parseInput(Text value) {
@@ -368,7 +371,6 @@ public class KNN {
         FileOutputFormat.setOutputPath(job, new Path(argv[1]));
 
         String testInstances = getTestInstances(argv[2]);
-        assert testInstances != null;
 	    conf.set("testInstances", testInstances);
 
         conf.set("k", argv[3]);
