@@ -128,7 +128,7 @@ public class KNN {
 
             String testSetString = conf.get("testInstances");
 
-            if (testSetString == null || testSetString == "") {
+            if (testSetString == null) {
                 System.out.println("oops");
                 return;
             }
@@ -368,6 +368,7 @@ public class KNN {
         FileOutputFormat.setOutputPath(job, new Path(argv[1]));
 
         String testInstances = getTestInstances(argv[2]);
+        assert testInstances != null;
 	    conf.set("testInstances", testInstances);
 
         conf.set("k", argv[3]);
