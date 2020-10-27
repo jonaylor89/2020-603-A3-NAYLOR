@@ -127,11 +127,6 @@ public class KNN {
 
             Configuration conf = context.getConfiguration();
 
-            StringWriter writer = new StringWriter();
-            Configuration.dumpConfiguration(conf, writer);
-
-            System.out.println(writer);
-
             k = Integer.parseInt(conf.get("k"));
 
             String testSetString = conf.get("testInstances");
@@ -355,6 +350,11 @@ public class KNN {
 
         Configuration conf = new Configuration();
 
+        String testInstances = getTestInstances(argv[2]);
+	    conf.set("testInstances", testInstances);
+
+        conf.set("k", argv[3]);
+
         Job job = Job.getInstance(conf, "KNN");
         job.setJarByClass(KNN.class);
 
@@ -373,11 +373,6 @@ public class KNN {
 
         FileInputFormat.addInputPath(job, new Path(argv[0]));
         FileOutputFormat.setOutputPath(job, new Path(argv[1]));
-
-        String testInstances = getTestInstances(argv[2]);
-	    conf.set("testInstances", testInstances);
-
-        conf.set("k", argv[3]);
 
         System.exit(job.waitForCompletion(true) ? 0 : 1);
 
