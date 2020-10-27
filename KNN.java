@@ -25,9 +25,6 @@ import weka.core.ArffReader;
 
 public class KNN {
 
-    private static int k;
-    private static Instances testSet;
-
     public class PairWritable implements Writable {
         private IntWritable value1;
         private DoubleWritable value2;
@@ -107,8 +104,21 @@ public class KNN {
             return trainSet;
         }
 
-        private static void computeKNN(Instance test, Point[] train) {
+        private static int[] getNeighbors(Instance test, Point[] train) {
             
+            int[] neighbors = new int[5];
+            for (int i = 0; i < train.length; i++) {
+
+                // Get distances
+                
+            }
+
+            // Sort
+
+            // Take 5
+
+            // return those 5
+
         }
 
         @Override
@@ -123,19 +133,23 @@ public class KNN {
          * key = idMapper * context.write(key, CDj)
          */
 
+         List<String> allTrainInstances = Arrays.asList(value.toString().split("\n"));
+         System.out.println("allTrainInstances " + allTrainInstances.size());
+
+         /*
             Point[] trainSetSplit_j = parseInput(value);
 
             PairWritable[][] CD_j = new double[testSet.numInstances()][k];
 
             for (int i = 0; i < testSet.numInstances(); i++) {
-                computeKNN(testSet[i], trainSetSplit_j);
+                int[] neighbors = getNeighbors(testSet[i], trainSetSplit_j);
 
                 for (int n = 0; n < k; n++) {
                     CD_j[i][n] = new PairWritable(testSet[i].getClassValue(), distance);
                 }
             }
-
             context.write(1, CD_j);
+            */
         }
     }
 
@@ -189,6 +203,7 @@ public class KNN {
          * 
          */
 
+         /*
             for (int i = 0; i < testSet.numInstances(); i++) {
                 int cont = 0;
                 for (int n = 0; n < k; n++) {
@@ -198,6 +213,9 @@ public class KNN {
                     }
                 }
             }
+            */
+
+            context.write(1, 1);
         }
 
         @Override
@@ -211,23 +229,26 @@ public class KNN {
          *
          */
 
+         /*
             for (int i = 0; i < testSet.numInstances(); i++) {
                 prediction = majorityVoting(CD_reducer[i]);
                 context.write(i, prediction);
             }
+            */
         }
 
     }
 
-    public static void main(String[] argv) {
+    private static Instances getTestInstances(String filename) {
 
-        k = 5;
-
-        BufferedReader reader = new BufferedReader(new FileReader("./Test/small.arff"));
-        ArffReader arff = new ArffReader(reader);
-
+        BufferedReader reader = new BufferedReader(new FileReader(filename));
         Instances testSet = arff.getData();
         testSet.setClassIndex(data.numAttributes() - 1);
+
+        return testSet;
+    }
+
+    public static void main(String[] argv) {
 
         Configuration conf = new Configuration();
 
@@ -249,6 +270,11 @@ public class KNN {
 
         FileInputFormat.addInputPath(job, new Path(args[0]));
         FileOutputFormat.addOutputPath(job, new Path(args[1]));
+
+        Instances testInstances = getTestInstances(args[2]);
+	    conf.set("testInstances", testInstances);
+
+        conf.set("k", args[3]);
 
         System.exit(job.waitForCompletion(true) ? 0 : 1);
 
