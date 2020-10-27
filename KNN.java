@@ -226,7 +226,7 @@ public class KNN {
             }
             */
 
-            context.write(IntWritable(1), IntWritable(1));
+            context.write(new IntWritable(1), new IntWritable(1));
         }
 
         // @Override
