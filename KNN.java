@@ -2,6 +2,7 @@ package xyz.jonaylor;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.io.FileReader;
 import java.io.File;
 import java.io.DataInput;
@@ -126,7 +127,10 @@ public class KNN {
 
             Configuration conf = context.getConfiguration();
 
-            System.out.println(conf);
+            StringWriter writer = new StringWriter();
+            Configuration.dumpConfiguration(conf, writer);
+
+            System.out.println(writer);
 
             k = Integer.parseInt(conf.get("k"));
 
