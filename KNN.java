@@ -55,6 +55,7 @@ public class KNN {
             return value1.toString() + " " + value2.toString();
         }
 
+        /*
         @Override
         public void readFields(DataInput in) throws IOException {
             value1.readFields(in);
@@ -66,6 +67,7 @@ public class KNN {
             value1.write(out);
             value2.write(out);
         }
+        */
     }
 
     public static class MapperKNN extends Mapper<Object, Text, IntWritable, PairWritable> {
