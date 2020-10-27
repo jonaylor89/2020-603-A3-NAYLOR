@@ -19,6 +19,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.DoubleWritable;
+import org.apache.hadoop.io.ArrayWritable;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.fs.Path;
@@ -33,12 +34,6 @@ import weka.core.Instance;
 import weka.core.converters.ArffLoader.ArffReader;
 
 public class KNN {
-
-    /*
-    public static class CustomArrayWritable implements Writable {
-        
-    }
-    */
 
     public static class PairWritable implements Writable {
         private IntWritable value1;
@@ -80,11 +75,10 @@ public class KNN {
         }
     }
 
-    public static class MapperKNN extends Mapper<Object, Text, IntWritable, PairWritable[][]> {
+    public static class MapperKNN extends Mapper<Object, Text, IntWritable, ArrayWritable> {
 
         private Instances testSet;
         private int k;
-        private static PairWritable[][] CD_j;
 
         public static class Point {
             private double data[];
@@ -201,18 +195,27 @@ public class KNN {
 
             Point[] trainSetSplit_j = parseInput(value);
 
-            CD_j = new PairWritable[testSet.numInstances()][k];
+            ArrayWritable CD_j = new ArrayWritable(ArrayWritable.class);
+            ArrayWritable[] CD_j_temp = new ArrayWritable[testSet.numInstances()];
 
             for (int i = 0; i < testSet.numInstances(); i++) {
                 Tuple[] neighbors = getNeighbors(testSet.instance(i), trainSetSplit_j);
 
+                ArrayWritable tempWritable = new ArrayWritable(PairWritable.class);
+                PairWritable[] temp = new PairWritable[5];
+
                 for (int n = 0; n < k; n++) {
                     int classValue = trainSetSplit_j[neighbors[n].getIdx()].getClassValue();
-                    CD_j[i][n] = new PairWritable(classValue, neighbors[n].getDistance());
+                    temp[n] = new PairWritable(classValue, neighbors[n].getDistance());
                 }
-            }
 
-            context.write(new IntWritable(1), CD_j);
+                tempWritable.set(temp);
+            }
+            CD_j.set(CD_j_temp);
+
+            IntWritable idx = new IntWritable(1);
+
+            context.write(idx, CD_j);
         }
     }
 
