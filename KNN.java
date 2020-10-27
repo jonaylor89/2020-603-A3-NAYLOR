@@ -22,9 +22,9 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-import weka.core.Instances;
-import weka.core.Instance;
-import weka.converters.ArffLoader.ArffReader;
+// import weka.core.Instances;
+// import weka.core.Instance;
+// import weka.converters.ArffLoader.ArffReader;
 
 public class KNN {
 
@@ -88,6 +88,7 @@ public class KNN {
             }
         }
 
+        /*
         private static Point[] parseInput(Text value) {
 
             String[] dataPoints = value.toString().split("\n");
@@ -106,6 +107,7 @@ public class KNN {
 
             return trainSet;
         }
+        */
 
         private static int[] getNeighbors(Instance test, Point[] train) {
             
@@ -276,10 +278,11 @@ public class KNN {
         FileInputFormat.addInputPath(job, new Path(args[0]));
         FileOutputFormat.addOutputPath(job, new Path(args[1]));
 
-        Instances testInstances = getTestInstances(args[2]);
-	    conf.set("testInstances", testInstances);
+        // Instances testInstances = getTestInstances(args[2]);
+	    // conf.set("testInstances", testInstances);
 
-        conf.set("k", args[3]);
+        // conf.set("k", args[3]);
+        conf.set("k", args[2]);
 
         System.exit(job.waitForCompletion(true) ? 0 : 1);
 
