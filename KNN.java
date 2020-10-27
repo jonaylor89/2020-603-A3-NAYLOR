@@ -48,7 +48,7 @@ public class KNN {
             return value1.get();
         }
 
-        public int get1() {
+        public double get1() {
             return value2.get();
         }
 
@@ -202,7 +202,7 @@ public class KNN {
         // }
 
         @Override
-        public void reduce(IntWritable key, PairWritable[][] value, Context context) throws IOException {
+        public void reduce(IntWritable key, Iterable<PairWritable> value, Context context) throws IOException {
         /*
          *
          * for i in range(testSet.size())
