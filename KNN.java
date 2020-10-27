@@ -145,6 +145,7 @@ public class KNN {
 
             // return those 5
 
+            return new int[0];
         }
 
         @Override
