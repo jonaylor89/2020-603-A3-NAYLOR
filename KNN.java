@@ -332,6 +332,12 @@ public class KNN {
         catch (IOException e) {
             e.printStackTrace();
         }
+
+        String contentString = contentBuilder.toString();
+        if (contentString == null) {
+            System.out.println("oops");
+            return "";
+        }
  
         return contentBuilder.toString();
     }
