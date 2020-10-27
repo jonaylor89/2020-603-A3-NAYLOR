@@ -219,12 +219,13 @@ public class KNN {
         }
     }
 
-    public static class ReducerKNN extends Reducer<IntWritable, PairWritable, IntWritable, IntWritable> {
+    public static class ReducerKNN extends Reducer<IntWritable, ArrayWritable, IntWritable, IntWritable> {
 
-        private static PairWritable CD_reducer[][];
+        private static PairWritable[][] CD_reducer;
+        private Instances testSet;
+        private int k;
 
-        /*
-        private static int majorityVoting(PairWritable[] row) {
+        private int majorityVoting(PairWritable[] row) {
 
             HashMap<Integer, Integer> histogram = new HashMap<Integer, Integer>();
             int mode_count = 0;
@@ -233,20 +234,19 @@ public class KNN {
             for (int i = 0; i < k; i++) {
 
                 int element = row[i].get0();
-                histogram[element]++;
+                histogram.put(element, histogram.get(element) + 1);
 
-                if (histogram[element] > mode_count) {
-                    mode_count = histogram[element];
+                if (histogram.get(element) > mode_count) {
+                    mode_count = histogram.get(element);
                     mode = element;
                 }
             }
 
             return mode;
         }
-        */
 
-        // @Override
-        // public static void setup(Context context) throws IOException {
+        @Override
+        public void setup(Context context) throws IOException {
         /*
          * 
          * create CD reducer matrix of size (size(testSet * k))
@@ -254,12 +254,20 @@ public class KNN {
          * Classes can be random but the distances should be set to infinity
          */
 
-            // CD_reducer = new PairWritable[testSet.numInstances()][k]; 
+            Configuration conf = context.getConfiguration();
 
-        // }
+            ArffReader arff = new ArffReader(new StringReader(conf.get("testInstances")));
+
+            testSet = arff.getData();
+            testSet.setClassIndex(testSet.numAttributes() - 1);
+
+            k = Integer.parseInt(conf.get("k"));
+
+            CD_reducer = new PairWritable[testSet.numInstances()][k]; 
+        }
 
         @Override
-        public void reduce(IntWritable key, Iterable<PairWritable> value, Context context) throws IOException, InterruptedException {
+        public void reduce(IntWritable key, Iterable<ArrayWritable> value, Context context) throws IOException, InterruptedException {
         /*
          *
          * for i in range(testSet.size())
@@ -338,7 +346,7 @@ public class KNN {
         // job.getConfiguration().setInt(LINES_PER_MAP, 300);
 
         job.setMapOutputKeyClass(IntWritable.class);
-        job.setMapOutputValueClass(PairWritable.class);
+        job.setMapOutputValueClass(ArrayWritable.class);
 
         job.setOutputKeyClass(IntWritable.class);
         job.setOutputValueClass(IntWritable.class);
