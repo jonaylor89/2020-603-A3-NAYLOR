@@ -90,6 +90,13 @@ public class KNN {
             }
         }
 
+        /*
+
+        @Override
+        private void setup() {
+
+        }
+
         private static Point[] parseInput(Text value) {
 
             String[] dataPoints = value.toString().split("\n");
@@ -126,6 +133,8 @@ public class KNN {
 
         }
 
+        */
+
         @Override
         public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
         /*
@@ -141,6 +150,7 @@ public class KNN {
          // List<String> allTrainInstances = Arrays.asList(value.toString().split("\n"));
          // System.out.println("allTrainInstances " + allTrainInstances.size());
 
+         /*
             Point[] trainSetSplit_j = parseInput(value);
 
             PairWritable[][] CD_j = new double[testSet.numInstances()][k];
@@ -152,7 +162,9 @@ public class KNN {
                     CD_j[i][n] = new PairWritable(testSet[i].getClassValue(), distance);
                 }
             }
-            context.write(1, CD_j);
+            context.write(new IntWritable(1), CD_j);
+
+            */
         }
     }
 
@@ -278,11 +290,11 @@ public class KNN {
         FileInputFormat.addInputPath(job, new Path(argv[0]));
         FileOutputFormat.setOutputPath(job, new Path(argv[1]));
 
-        // Instances testInstances = getTestInstances(args[2]);
-	    // conf.set("testInstances", testInstances);
+        Instances testInstances = getTestInstances(args[2]);
+	    conf.set("testInstances", testInstances);
 
-        // conf.set("k", args[3]);
-        conf.set("k", argv[2]);
+        conf.set("k", args[3]);
+        // conf.set("k", argv[2]);
 
         System.exit(job.waitForCompletion(true) ? 0 : 1);
 
