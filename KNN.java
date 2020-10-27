@@ -5,11 +5,15 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.File;
 import java.util.StringTokenizer;
+import java.util.List;
+import java.util.HashMap;
+import java.util.Arrays;
 
 import org.apache.hadoop.commons.io.FilesUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.fs.Path;
@@ -157,6 +161,7 @@ public class KNN {
 
         private static PairWritable CD_reducer[][];
 
+        /*
         private static int majorityVoting(PairWritable[] row) {
 
             HashMap<Integer, Integer> histogram = new HashMap<Integer, Integer>();
@@ -176,6 +181,7 @@ public class KNN {
 
             return mode;
         }
+        */
 
         @Override
         public static void setup(Context context) throws IOException {
@@ -186,7 +192,7 @@ public class KNN {
          * Classes can be random but the distances should be set to infinity
          */
 
-            CD_reducer = new PairWritable[testSet.numInstances()][k]; 
+            // CD_reducer = new PairWritable[testSet.numInstances()][k]; 
 
         }
 
