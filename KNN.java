@@ -118,7 +118,7 @@ public class KNN {
 
             for (int i = 0; i < dataPoints.length; i++) {
                 String[] rawPoint = dataPoints[i].split(",");
-                double[] dataPoint = rawPoint.stream().mapToInt(Double::parseDouble).toArray();  
+                double[] dataPoint = Arrays.asList(rawPoint).stream().mapToInt(Double::parseDouble).toArray();  
 
                 double[] dimensions = Arrays.copyOfRange(dataPoint, 0, dataPoint.length - 2);
                 int classValue = (int)dataPoint[dataPoint.length - 1];
