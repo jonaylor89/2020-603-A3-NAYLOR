@@ -183,8 +183,8 @@ public class KNN {
         }
         */
 
-        @Override
-        public static void setup(Context context) throws IOException {
+        // @Override
+        // public static void setup(Context context) throws IOException {
         /*
          * 
          * create CD reducer matrix of size (size(testSet * k))
@@ -194,7 +194,7 @@ public class KNN {
 
             // CD_reducer = new PairWritable[testSet.numInstances()][k]; 
 
-        }
+        // }
 
         @Override
         public static void reduce(IntWritable key, PairWritable[][] value, Context context) throws IOException {
@@ -224,8 +224,8 @@ public class KNN {
             context.write(1, 1);
         }
 
-        @Override
-        public static void cleanup(Context context) throws IOException {
+        // @Override
+        // public static void cleanup(Context context) throws IOException {
         /*
          *
          * for i in range(0, size(testSet))
@@ -241,7 +241,7 @@ public class KNN {
                 context.write(i, prediction);
             }
             */
-        }
+        // }
 
     }
 
