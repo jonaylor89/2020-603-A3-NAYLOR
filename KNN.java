@@ -34,7 +34,13 @@ import weka.core.converters.ArffLoader.ArffReader;
 
 public class KNN {
 
-    public class PairWritable implements Writable {
+    /*
+    public static class CustomArrayWritable implements Writable {
+        
+    }
+    */
+
+    public static class PairWritable implements Writable {
         private IntWritable value1;
         private DoubleWritable value2;
 
@@ -74,10 +80,11 @@ public class KNN {
         }
     }
 
-    public static class MapperKNN extends Mapper<Object, Text, IntWritable, PairWritable> {
+    public static class MapperKNN extends Mapper<Object, Text, IntWritable, PairWritable[][]> {
 
         private Instances testSet;
         private int k;
+        private static PairWritable[][] CD_j;
 
         public static class Point {
             private double data[];
@@ -94,6 +101,28 @@ public class KNN {
 
             int getClassValue() {
                 return classValue;
+            }
+        }
+
+        public static class Tuple implements Comparable<Tuple> {
+            private int idx;
+            private double distance;
+
+            public Tuple(int idx, double distance) {
+                this.idx = idx;
+                this.distance = distance;
+            }
+
+            public int getIdx() {
+                return idx;
+            }
+
+            public double getDistance() {
+                return distance;
+            }
+
+            public int compareTo(Tuple other) {
+                return (int)(this.distance - other.getDistance());
             }
         }
 
@@ -130,22 +159,29 @@ public class KNN {
             return trainSet;
         }
 
-        private static int[] getNeighbors(Instance test, Point[] train) {
+        private Tuple[] getNeighbors(Instance test, Point[] train) {
             
-            int[] neighbors = new int[5];
+            Tuple[] neighbors = new Tuple[5];
+            Tuple[] distances = new Tuple[testSet.numInstances()];
             for (int i = 0; i < train.length; i++) {
 
                 // Get distances
-                
+                long squaredSum = 0;
+                for (int j = 0; j < testSet.numAttributes() - 1; j++) {
+                    squaredSum += Math.pow((double)test.index(j) - train[i].data[j], 2);
+                }
+                distances[i] = new Tuple(i, Math.sqrt(squaredSum));
             }
 
             // Sort
+            Arrays.sort(distances);
 
             // Take 5
+            for (int i = 0; i < k; i++) {
+                neighbors[i] = distances[i];
+            }
 
-            // return those 5
-
-            return new int[0];
+            return neighbors;
         }
 
         @Override
@@ -163,21 +199,20 @@ public class KNN {
          // List<String> allTrainInstances = Arrays.asList(value.toString().split("\n"));
          // System.out.println("allTrainInstances " + allTrainInstances.size());
 
-         /*
             Point[] trainSetSplit_j = parseInput(value);
 
-            PairWritable[][] CD_j = new double[testSet.numInstances()][k];
+            CD_j = new PairWritable[testSet.numInstances()][k];
 
             for (int i = 0; i < testSet.numInstances(); i++) {
-                int[] neighbors = getNeighbors(testSet[i], trainSetSplit_j);
+                Tuple[] neighbors = getNeighbors(testSet.instance(i), trainSetSplit_j);
 
                 for (int n = 0; n < k; n++) {
-                    CD_j[i][n] = new PairWritable(testSet[i].getClassValue(), distance);
+                    int classValue = trainSetSplit_j[neighbors[n].getIdx()].getClassValue();
+                    CD_j[i][n] = new PairWritable(classValue, neighbors[n].getDistance());
                 }
             }
-            context.write(new IntWritable(1), CD_j);
 
-            */
+            context.write(new IntWritable(1), CD_j);
         }
     }
 
