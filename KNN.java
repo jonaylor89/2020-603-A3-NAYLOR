@@ -109,6 +109,7 @@ public class KNN {
         }
         */
 
+        /*
         private static int[] getNeighbors(Instance test, Point[] train) {
             
             int[] neighbors = new int[5];
@@ -125,6 +126,7 @@ public class KNN {
             // return those 5
 
         }
+        */
 
         @Override
         public static void map(Object key, Text value, Context context) throws IOException {
