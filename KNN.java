@@ -279,23 +279,29 @@ public class KNN {
          * 
          */
 
-         /*
-            for (int i = 0; i < testSet.numInstances(); i++) {
-                int cont = 0;
-                for (int n = 0; n < k; n++) {
-                    if (value[i][cont].get1() < CD_reducer[i][n].get1()) {
-                        CD_reducer[i][n] = value[i][cont];
-                        cont++;
+            for (ArrayWritable subset : value) {
+
+                PairWritable[][] CD_j = new PairWritable[testSet.numInstances()][k];
+
+                ArrayWritable[] temp = (ArrayWritable[])subset.toArray();
+                for (int j = 0; j < testSet.numInstances(); j++) {
+                    CD_j[j] = (PairWritable[])temp[j].toArray();
+                }
+
+                for (int i = 0; i < testSet.numInstances(); i++) {
+                    int cont = 0;
+                    for (int n = 0; n < k; n++) {
+                        if (CD_j[i][cont].get1() < CD_reducer[i][n].get1()) {
+                            CD_reducer[i][n] = CD_j[i][cont];
+                            cont++;
+                        }
                     }
                 }
             }
-            */
-
-            context.write(new IntWritable(1), new IntWritable(1));
         }
 
-        // @Override
-        // public static void cleanup(Context context) throws IOException {
+        @Override
+        public void cleanup(Context context) throws IOException, InterruptedException {
         /*
          *
          * for i in range(0, size(testSet))
@@ -305,13 +311,12 @@ public class KNN {
          *
          */
 
-         /*
+
             for (int i = 0; i < testSet.numInstances(); i++) {
-                prediction = majorityVoting(CD_reducer[i]);
-                context.write(i, prediction);
+                int prediction = majorityVoting(CD_reducer[i]);
+                context.write(new IntWritable(prediction), new IntWritable(prediction));
             }
-            */
-        // }
+        }
 
     }
 
