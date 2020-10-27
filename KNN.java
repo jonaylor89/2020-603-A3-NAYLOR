@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.File;
+import java.io.DataInput;
+import java.io.DataOutput;
 import java.util.StringTokenizer;
 import java.util.List;
 import java.util.HashMap;
@@ -28,7 +30,6 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 public class KNN {
 
-    /*
     public class PairWritable implements Writable {
         private IntWritable value1;
         private DoubleWritable value2;
@@ -68,7 +69,6 @@ public class KNN {
             value2.write(out);
         }
     }
-    */
 
     public static class MapperKNN extends Mapper<Object, Text, IntWritable, PairWritable> {
 
