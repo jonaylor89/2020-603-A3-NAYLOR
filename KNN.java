@@ -126,7 +126,8 @@ public class KNN {
 
             Configuration conf = context.getConfiguration();
 
-            StringReader reader = new StringReader(conf.get("testInstances"));
+            String testSetString = conf.get("testInstances");
+            StringReader reader = new StringReader(testSetString);
             ArffReader arff = new ArffReader(reader);
 
             testSet = arff.getData();
