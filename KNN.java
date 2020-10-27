@@ -128,7 +128,7 @@ public class KNN {
 
             String testSetString = conf.get("testInstances");
 
-            if (testSetString == nul || testSetString == "") {
+            if (testSetString == null || testSetString == "") {
                 System.out.println("oops");
                 return;
             }
