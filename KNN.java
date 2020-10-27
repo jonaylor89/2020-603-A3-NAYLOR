@@ -131,7 +131,7 @@ public class KNN {
         */
 
         @Override
-        public void map(Object key, Text value, Context context) throws IOException {
+        public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
         /*
          *
          * for i in range(testSet)
@@ -202,7 +202,7 @@ public class KNN {
         // }
 
         @Override
-        public void reduce(IntWritable key, Iterable<PairWritable> value, Context context) throws IOException {
+        public void reduce(IntWritable key, Iterable<PairWritable> value, Context context) throws IOException, InterruptedException {
         /*
          *
          * for i in range(testSet.size())
@@ -261,7 +261,7 @@ public class KNN {
     }
     */
 
-    public static void main(String[] argv) {
+    public static void main(String[] argv) throws Exception {
 
         Configuration conf = new Configuration();
 
