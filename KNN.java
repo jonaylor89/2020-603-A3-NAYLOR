@@ -103,7 +103,7 @@ public class KNN {
 
             Configuration conf = context.getConfiguration();
 
-            ArffReader arff = new ArffReader(conf.get("testInstances"));
+            ArffReader arff = new ArffReader(new StringReader(conf.get("testInstances")));
 
             testSet = arff.getData();
             testSet.setClassIndex(data.numAttributes() - 1);
