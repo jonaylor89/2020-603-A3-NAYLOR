@@ -129,7 +129,7 @@ public class KNN {
         */
 
         @Override
-        public static void map(Object key, Text value, Context context) throws IOException {
+        public void map(Object key, Text value, Context context) throws IOException {
         /*
          *
          * for i in range(testSet)
@@ -200,7 +200,7 @@ public class KNN {
         // }
 
         @Override
-        public static void reduce(IntWritable key, PairWritable[][] value, Context context) throws IOException {
+        public void reduce(IntWritable key, PairWritable[][] value, Context context) throws IOException {
         /*
          *
          * for i in range(testSet.size())
