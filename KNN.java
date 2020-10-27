@@ -126,7 +126,8 @@ public class KNN {
 
             Configuration conf = context.getConfiguration();
 
-            ArffReader arff = new ArffReader(new StringReader(conf.get("testInstances")));
+            StringReader reader = new StringReader(conf.get("testInstances"));
+            ArffReader arff = new ArffReader(reader);
 
             testSet = arff.getData();
             testSet.setClassIndex(testSet.numAttributes() - 1);
@@ -324,12 +325,10 @@ public class KNN {
 
         StringBuilder contentBuilder = new StringBuilder();
  
-        try (Stream<String> stream = Files.lines(Paths.get(filename), StandardCharsets.UTF_8)) 
-        {
+        try (Stream<String> stream = Files.lines(Paths.get(filename), StandardCharsets.UTF_8)) {
             stream.forEach(s -> contentBuilder.append(s).append("\n"));
         }
-        catch (IOException e) 
-        {
+        catch (IOException e) {
             e.printStackTrace();
         }
  
@@ -363,7 +362,6 @@ public class KNN {
 	    conf.set("testInstances", testInstances);
 
         conf.set("k", argv[3]);
-        // conf.set("k", argv[2]);
 
         System.exit(job.waitForCompletion(true) ? 0 : 1);
 
