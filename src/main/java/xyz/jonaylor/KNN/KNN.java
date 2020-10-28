@@ -36,8 +36,8 @@ import weka.core.converters.ArffLoader.ArffReader;
 
 public class KNN {
 
-    public static class ArrayArrayWritable extends ArrayWritable { public ArrayArrayWritable() { super(ArrayWritable.class); } }
     public static class PairArrayWritable extends ArrayWritable { public PairArrayWritable() { super(PairWritable.class); } }
+    public static class ArrayArrayWritable extends ArrayWritable { public ArrayArrayWritable() { super(PairArrayWritable.class); } }
 
     public static class PairWritable implements Writable {
         private IntWritable value1;
@@ -214,7 +214,7 @@ public class KNN {
             }
 
             ArrayArrayWritable CD_j = new ArrayArrayWritable();
-            ArrayWritable[] CD_j_temp = new ArrayWritable[testSet.numInstances()];
+            PairArrayWritable[] CD_j_temp = new PairArrayWritable[testSet.numInstances()];
 
             for (int i = 0; i < testSet.numInstances(); i++) {
                 Tuple[] neighbors = getNeighbors(testSet.instance(i), trainSetSplit_j);
@@ -384,7 +384,7 @@ public class KNN {
         // job.getConfiguration().setInt(LINES_PER_MAP, 300);
 
         job.setMapOutputKeyClass(IntWritable.class);
-        job.setMapOutputValueClass(ArrayWritable.class);
+        job.setMapOutputValueClass(ArrayArrayWritable.class);
 
         job.setOutputKeyClass(IntWritable.class);
         job.setOutputValueClass(IntWritable.class);
