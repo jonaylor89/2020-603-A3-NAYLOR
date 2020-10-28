@@ -171,7 +171,7 @@ public class KNN {
 
                 // Get distances
                 long squaredSum = 0;
-                for (int j = 0; j < testSet.numAttributes() - 1; j++) {
+                for (int j = 0; j < testSet.numAttributes() - 2; j++) {
                     squaredSum += Math.pow((double)test.index(j) - train[i].data[j], 2);
                 }
                 distances[i] = new Tuple(i, Math.sqrt(squaredSum));
