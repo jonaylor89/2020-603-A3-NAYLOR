@@ -217,7 +217,7 @@ public class KNN {
                 Tuple[] neighbors = getNeighbors(testSet.instance(i), trainSetSplit_j);
 
                 ArrayWritable tempWritable = new ArrayWritable(PairWritable.class);
-                PairWritable[] temp = new PairWritable[5];
+                PairWritable[] temp = new PairWritable[k];
 
                 for (int n = 0; n < k; n++) {
                     int classValue = trainSetSplit_j[neighbors[n].getIdx()].getClassValue();
@@ -225,6 +225,7 @@ public class KNN {
                 }
 
                 tempWritable.set(temp);
+                CD_j_temp[i] = tempWritable;
             }
             CD_j.set(CD_j_temp);
 
@@ -301,6 +302,10 @@ public class KNN {
                 ArrayWritable[] temp = (ArrayWritable[])subset.toArray();
                 for (int j = 0; j < testSet.numInstances(); j++) {
                     CD_j[j] = (PairWritable[])temp[j].toArray();
+                }
+
+                if (CD_j[0].length < k) {
+                    k = CD_j[0].length;
                 }
 
                 for (int i = 0; i < testSet.numInstances(); i++) {
