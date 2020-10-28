@@ -165,7 +165,7 @@ public class KNN {
 
         private Tuple[] getNeighbors(Instance test, Point[] train) {
             
-            Tuple[] neighbors = new Tuple[5];
+            Tuple[] neighbors = new Tuple[k];
             Tuple[] distances = new Tuple[train.length];
             for (int i = 0; i < train.length; i++) {
 
