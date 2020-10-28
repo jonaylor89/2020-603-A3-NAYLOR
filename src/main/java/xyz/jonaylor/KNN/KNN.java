@@ -338,7 +338,7 @@ public class KNN {
             for (int i = 0; i < testSet.numInstances(); i++) {
                 if (CD_reducer[i] != null) {
                     int prediction = majorityVoting(CD_reducer[i]);
-                    context.write(new IntWritable(prediction), new IntWritable(prediction));
+                    context.write(new IntWritable(i), new IntWritable(prediction));
                 }
             }
         }
