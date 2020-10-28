@@ -36,6 +36,9 @@ import weka.core.converters.ArffLoader.ArffReader;
 
 public class KNN {
 
+    public class ArrayArrayWritable extends ArrayWritable { public ArrayArrayWritable() { super(ArrayWritable.class); } }
+    public class PairArrayWritable extends ArrayWritable { public PairArrayWritable() { super(PairWritable.class); } }
+
     public static class PairWritable implements Writable {
         private IntWritable value1;
         private DoubleWritable value2;
@@ -76,7 +79,7 @@ public class KNN {
         }
     }
 
-    public static class MapperKNN extends Mapper<Object, Text, IntWritable, ArrayWritable> {
+    public static class MapperKNN extends Mapper<Object, Text, IntWritable, ArrayArrayWritable> {
 
         private Instances testSet;
         private int k;
@@ -210,13 +213,13 @@ public class KNN {
                 k = trainSetSplit_j.length;
             }
 
-            ArrayWritable CD_j = new ArrayWritable(ArrayWritable.class);
+            ArrayWritable CD_j = new ArrayArrayWritable();
             ArrayWritable[] CD_j_temp = new ArrayWritable[testSet.numInstances()];
 
             for (int i = 0; i < testSet.numInstances(); i++) {
                 Tuple[] neighbors = getNeighbors(testSet.instance(i), trainSetSplit_j);
 
-                ArrayWritable tempWritable = new ArrayWritable(PairWritable.class);
+                ArrayWritable tempWritable = new PairArrayWritable();
                 PairWritable[] temp = new PairWritable[k];
 
                 for (int n = 0; n < k; n++) {
@@ -235,7 +238,7 @@ public class KNN {
         }
     }
 
-    public static class ReducerKNN extends Reducer<IntWritable, ArrayWritable, IntWritable, IntWritable> {
+    public static class ReducerKNN extends Reducer<IntWritable, ArrayArrayWritable, IntWritable, IntWritable> {
 
         private static PairWritable[][] CD_reducer;
         private Instances testSet;
@@ -286,7 +289,7 @@ public class KNN {
         }
 
         @Override
-        public void reduce(IntWritable key, Iterable<ArrayWritable> value, Context context) throws IOException, InterruptedException {
+        public void reduce(IntWritable key, Iterable<ArrayArrayWritable> value, Context context) throws IOException, InterruptedException {
         /*
          *
          * for i in range(testSet.size())
