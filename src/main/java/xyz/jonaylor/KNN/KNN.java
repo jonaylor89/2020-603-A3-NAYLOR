@@ -206,6 +206,10 @@ public class KNN {
 
             Point[] trainSetSplit_j = parseInput(value);
 
+            if (k > trainSetSplit_j.lenth) {
+                k = trainSetSplit_j.length;
+            }
+
             ArrayWritable CD_j = new ArrayWritable(ArrayWritable.class);
             ArrayWritable[] CD_j_temp = new ArrayWritable[testSet.numInstances()];
 
