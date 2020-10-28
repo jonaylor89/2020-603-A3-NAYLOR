@@ -249,12 +249,15 @@ public class KNN {
             
             for (int i = 0; i < k; i++) {
 
-                int element = row[i].get0();
-                histogram.put(element, histogram.get(element) + 1);
+                if (row[i] != null) {
 
-                if (histogram.get(element) > mode_count) {
-                    mode_count = histogram.get(element);
-                    mode = element;
+                    int element = row[i].get0();
+                    histogram.put(element, histogram.get(element) + 1);
+
+                    if (histogram.get(element) > mode_count) {
+                        mode_count = histogram.get(element);
+                        mode = element;
+                    }
                 }
             }
 
@@ -333,8 +336,10 @@ public class KNN {
 
 
             for (int i = 0; i < testSet.numInstances(); i++) {
-                int prediction = majorityVoting(CD_reducer[i]);
-                context.write(new IntWritable(prediction), new IntWritable(prediction));
+                if (CD_reducer[i] != null) {
+                    int prediction = majorityVoting(CD_reducer[i]);
+                    context.write(new IntWritable(prediction), new IntWritable(prediction));
+                }
             }
         }
 
