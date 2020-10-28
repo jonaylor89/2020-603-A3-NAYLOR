@@ -36,8 +36,12 @@ import weka.core.converters.ArffLoader.ArffReader;
 
 public class KNN {
 
-    public static class PairArrayWritable extends ArrayWritable { public PairArrayWritable() { super(PairWritable.class); } }
-    public static class ArrayArrayWritable extends ArrayWritable { public ArrayArrayWritable() { super(PairArrayWritable.class); } }
+    public static class PairArrayWritable extends ArrayWritable implements Writable { 
+	    public PairArrayWritable() { super(PairWritable.class); } 
+    }
+    public static class ArrayArrayWritable extends ArrayWritable implements Writable { 
+	    public ArrayArrayWritable() { super(PairArrayWritable.class); } 
+    }
 
     public static class PairWritable implements Writable {
         private IntWritable value1;
@@ -301,13 +305,13 @@ public class KNN {
          * 
          */
 
-            for (ArrayWritable subset : value) {
+            for (ArrayArrayWritable subset : value) {
 
                 PairWritable[][] CD_j = new PairWritable[testSet.numInstances()][k];
 
-                ArrayWritable[] temp = (ArrayWritable[])subset.toArray();
+                PairArrayWritable[] temp = (PairArrayWritable[])subset.get();
                 for (int j = 0; j < testSet.numInstances(); j++) {
-                    CD_j[j] = (PairWritable[])temp[j].toArray();
+                    CD_j[j] = (PairWritable[])temp[j].get();
                 }
 
                 if (CD_j[0].length < k) {
