@@ -206,7 +206,7 @@ public class KNN {
 
             Point[] trainSetSplit_j = parseInput(value);
 
-            if (k > trainSetSplit_j.lenth) {
+            if (k > trainSetSplit_j.length) {
                 k = trainSetSplit_j.length;
             }
 
