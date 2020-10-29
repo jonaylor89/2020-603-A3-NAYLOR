@@ -233,7 +233,6 @@ public class KNN {
                 for (int n = 0; n < k; n++) {
                     int classValue = trainSetSplit_j[neighbors[n].getIdx()].getClassValue();
                     temp[n] = new PairWritable(classValue, neighbors[n].getDistance());
-                    System.out.println(temp[n].toString());
                 }
 
                 tempWritable.set(temp);
@@ -318,6 +317,7 @@ public class KNN {
                 for (int j = 0; j < testSet.numInstances(); j++) {
                     Writable[] temp2 = ((PairArrayWritable)temp[j]).get();
                     for (int k = 0; k < k; k++) {
+                        System.out.println(((PairWritable)temp2[k]).toString());
                         CD_j[j][k] = (PairWritable)temp2[k];
                     }
                 }
