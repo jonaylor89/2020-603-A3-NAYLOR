@@ -324,9 +324,11 @@ public class KNN {
                 for (int i = 0; i < testSet.numInstances(); i++) {
                     int cont = 0;
                     for (int n = 0; n < k; n++) {
-                        if (CD_j[i][cont].get1() < CD_reducer[i][n].get1()) {
-                            CD_reducer[i][n] = CD_j[i][cont];
-                            cont++;
+                        if(CD_j[i][cont] != null) {
+                            if (CD_reducer[i][n] == null || CD_j[i][cont].get1() < CD_reducer[i][n].get1()) {
+                                CD_reducer[i][n] = CD_j[i][cont];
+                                cont++;
+                            }
                         }
                     }
                 }
