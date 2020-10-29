@@ -309,9 +309,9 @@ public class KNN {
 
                 PairWritable[][] CD_j = new PairWritable[testSet.numInstances()][k];
 
-                PairArrayWritable[] temp = (PairArrayWritable[])subset.get();
+                Writable[] temp = subset.get();
                 for (int j = 0; j < testSet.numInstances(); j++) {
-                    CD_j[j] = (PairWritable[])temp[j].get();
+                    CD_j[j] = (PairWritable[])((PairArrayWritable)temp[j]).get();
                 }
 
                 if (CD_j[0].length < k) {
