@@ -309,6 +309,8 @@ public class KNN {
          * 
          */
 
+         System.out.println("I AM HERE LOOK AT ME");
+
             for (ArrayArrayWritable subset : value) {
 
                 PairWritable[][] CD_j = new PairWritable[testSet.numInstances()][k];
