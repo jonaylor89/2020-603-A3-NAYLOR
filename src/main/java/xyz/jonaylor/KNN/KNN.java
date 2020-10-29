@@ -263,7 +263,11 @@ public class KNN {
                 if (row[i] != null) {
 
                     int element = row[i].get0();
-                    histogram.put(element, histogram.get(element) + 1);
+                    if (!histogram.containsKey(element)){
+                        histogram.put(element, 1);
+                    } else{
+                        histogram.put(element, histogram.get(element) + 1);
+                    }
 
                     if (histogram.get(element) > mode_count) {
                         mode_count = histogram.get(element);
@@ -309,8 +313,6 @@ public class KNN {
          * 
          */
 
-            System.out.println("I AM HERE LOOK AT ME");
-
             for (ArrayArrayWritable subset : value) {
 
                 PairWritable[][] CD_j = new PairWritable[testSet.numInstances()][k];
@@ -319,7 +321,6 @@ public class KNN {
                 for (int j = 0; j < testSet.numInstances(); j++) {
                     Writable[] temp2 = ((PairArrayWritable)temp[j]).get();
                     for (int a = 0; a < k; a++) {
-                        System.out.println("WHAT THE HELL" + ((PairWritable)temp2[a]).toString());
                         CD_j[j][a] = (PairWritable)temp2[a];
                     }
                 }
