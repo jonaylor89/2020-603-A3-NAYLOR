@@ -318,9 +318,9 @@ public class KNN {
                 Writable[] temp = subset.get();
                 for (int j = 0; j < testSet.numInstances(); j++) {
                     Writable[] temp2 = ((PairArrayWritable)temp[j]).get();
-                    for (int k = 0; k < k; k++) {
-                        System.out.println("WHAT THE HELL" + ((PairWritable)temp2[k]).toString());
-                        CD_j[j][k] = (PairWritable)temp2[k];
+                    for (int a = 0; a < k; a++) {
+                        System.out.println("WHAT THE HELL" + ((PairWritable)temp2[a]).toString());
+                        CD_j[j][a] = (PairWritable)temp2[a];
                     }
                 }
 
