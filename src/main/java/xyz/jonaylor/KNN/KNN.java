@@ -320,13 +320,14 @@ public class KNN {
                 Writable[] temp = subset.get();
                 for (int j = 0; j < testSet.numInstances(); j++) {
                     Writable[] temp2 = ((PairArrayWritable)temp[j]).get();
+ 
+                    if (temp2.length < k) {
+                        k = temp2.length;
+                    }
+                   
                     for (int a = 0; a < k; a++) {
                         CD_j[j][a] = (PairWritable)temp2[a];
                     }
-                }
-
-                if (CD_j[0].length < k) {
-                    k = CD_j[0].length;
                 }
 
                 for (int i = 0; i < testSet.numInstances(); i++) {
