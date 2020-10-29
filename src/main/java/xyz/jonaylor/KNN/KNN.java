@@ -195,9 +195,8 @@ public class KNN {
             // Take 5
             for (int i = 0; i < k; i++) {
                 neighbors[i] = distances[i];
+                System.out.println(neighbors[i].toString());
             }
-
-            System.out.println(neighbors);
 
             return neighbors;
         }
