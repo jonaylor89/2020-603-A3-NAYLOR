@@ -309,7 +309,7 @@ public class KNN {
          * 
          */
 
-         System.out.println("I AM HERE LOOK AT ME");
+            System.out.println("I AM HERE LOOK AT ME");
 
             for (ArrayArrayWritable subset : value) {
 
@@ -319,7 +319,7 @@ public class KNN {
                 for (int j = 0; j < testSet.numInstances(); j++) {
                     Writable[] temp2 = ((PairArrayWritable)temp[j]).get();
                     for (int k = 0; k < k; k++) {
-                        System.out.println(((PairWritable)temp2[k]).toString());
+                        System.out.println("WHAT THE HELL" + ((PairWritable)temp2[k]).toString());
                         CD_j[j][k] = (PairWritable)temp2[k];
                     }
                 }
