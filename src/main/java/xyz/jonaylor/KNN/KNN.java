@@ -195,7 +195,6 @@ public class KNN {
             // Take 5
             for (int i = 0; i < k; i++) {
                 neighbors[i] = distances[i];
-                System.out.println(neighbors[i].toString());
             }
 
             return neighbors;
@@ -234,6 +233,7 @@ public class KNN {
                 for (int n = 0; n < k; n++) {
                     int classValue = trainSetSplit_j[neighbors[n].getIdx()].getClassValue();
                     temp[n] = new PairWritable(classValue, neighbors[n].getDistance());
+                    System.out.println(temp[n].toString());
                 }
 
                 tempWritable.set(temp);
