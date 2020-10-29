@@ -123,6 +123,10 @@ public class KNN {
                 return distance;
             }
 
+            public String toString() {
+                return idx + " " + distance;
+            }
+
             public int compareTo(Tuple other) {
                 return (int)(this.distance - other.getDistance());
             }
