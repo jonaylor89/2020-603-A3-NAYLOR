@@ -193,6 +193,8 @@ public class KNN {
                 neighbors[i] = distances[i];
             }
 
+            System.out.println(neighbors);
+
             return neighbors;
         }
 
